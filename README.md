@@ -6,7 +6,7 @@ Back-End written in C# .Net Core 3.1
 Front-End in Angular 8.2
 Database: Entity Framework in-Memory 
 
-Pre-Req: Node.js Installed on machine
+Pre-Req: Node.js 12 Installed on machine
 
 To run the Application
 
