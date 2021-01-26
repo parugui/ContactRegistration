@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Contact Registration</title>
+</head>
+<body>
+
+  <div [hidden]="error === ''">
+    <strong><span style="color:red">&nbsp;{{error}}</span></strong>
+  </div>
+
+  <!--grid-->
+  <div class="card" style=" border-color: #F29D00;" [hidden]="edit">
+    <div class="card-header" style="background-color: #F29D00">
+      Contacts
+      <div style="float:right;">
+        <button class="btn btn-sm btn-success" style="margin-left:5px" (click)="AddContact()" title="New Contact">
+          <span class="fa fa-plus" aria-hidden="true" style="font-size:18px"></span>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div style="overflow-y: scroll;overflow-x: hidden;max-height: 800px;" [hidden]="countRegister !== ''">
+        <table class="table table-striped">
+          <caption></caption>
+          <thead>
+            <tr>
+              <th scope="col" style="width:15%">Name</th>
+              <th scope="col" style="width:10%">CPF</th>
+              <th scope="col" style="width:15%">CompanyName</th>
+              <th scope="col" style="width:15%">TradeName</th>
+              <th scope="col" style="width:15%">CNPJ</th>
+              <th scope="col" style="width:10%"></th>
+              <th scope="col" style="width:10%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cont of listContacts">
+              <td>{{cont.name}}</td>
+              <td mask="000.000.000-00">{{cont.cpf}}</td>
+              <td>{{cont.companyName}}</td>
+              <td>{{cont.tradeName}}</td>
+              <td>{{cont.cnpj}}</td>
+
+              <td style="text-align:right">
+                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFile" (click)="Edit(cont.idContact)" tooltip="Edit">
+                  <span class="fa fa-pencil" aria-hidden="true" style="font-size:15px"></span>
+                </button>
+                <button class="btn btn-sm btn-primary" style="margin-left:5px" data-toggle="modal" (click)="Delete(cont.idContact)" tooltip="Delete">
+                  <span class="fa fa-trash" aria-hidden="true" style="font-size:15px"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <strong><span style="color:red">&nbsp;{{countRegister}}</span></strong>
+    </div>
+  </div>
+  <!--grid-->
+  <!--registration-->
+
+  <div [hidden]="!edit" class="horizontal-scrollable" style="min-height:700px">
+    <table>
+      <tr>
+        <td style="width: 20%" >
+          <div class="input-group" placement="top" ngbTooltip="Person" style="width: 180px">
+            <div class="form-check-inline"><input type="radio" class="form-check-input" name="rdoStatus" [(ngModel)]="isNaturalPerson" [value]="true" [checked]="isNaturalPerson == true" /> Natural </div>
+            <div class="form-check-inline"><input type="radio" class="form-check-input" name="rdoStatus" [(ngModel)]="isNaturalPerson" [value]="false" [checked]="isNaturalPerson == false" /> Legal</div>
+          </div>
+        </td>
+        <td id="buttons" style="width:98%;text-align:right" >
+          <div class="btn-group">
+            <button class="btn btn-sm btn-primary" style="margin-left:5px" (click)="back()" title="Back">
+              <span class="fa fa-long-arrow-left " aria-hidden="true" style="font-size:17px"></span>
+            </button>
+            <button class="btn btn-sm btn-success" style="margin-left:5px" (click)="save()" title="Save">
+              <span class="fa fa-floppy-o" aria-hidden="true" style="font-size:18px"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <table style="width:98%" [hidden]="loading">
+      <caption></caption>
+      <tr>
+        <td>
+          <table class="table table-striped" style="width:100%" [hidden]="isNaturalPerson == false">
+            <tr>
+              <th scope="col" style="width:25%">Name</th>
+              <th scope="col" style="width:25%">CPF</th>
+              <th scope="col" style="width:25%">Gender</th>
+              <th scope="col" style="width:25%">Birthday</th>
+
+            </tr>
+            <tr>
+              <td>
+                <input class="form-control" maxlength="70" [(ngModel)]="contact.name" />
+                <div *ngIf="nameHasError===true" class="alert alert-danger" style="width:100%">
+                  <i class="fa fa-warning" aria-hidden="true"></i> Contact Name is required.
+                </div>
+              </td>
+              <td>
+                <input class="form-control" type="text" mask="000.000.000-00" [(ngModel)]="contact.cpf" >
+                <div *ngIf="cpfHasError===true" class="alert alert-danger" style="width:100%">
+                  <i class="fa fa-warning" aria-hidden="true"></i> Contact CPF is required.
+                </div>
+              </td>
+              <td style="width:25%">
+                <div class="input-group mb-3" tooltip="Gender">
+
+                  <select name="selectFollowUpType" [(ngModel)]="contact.gender" (change)="selectedGenderType($event)" class="form-control" >
+                    <option [value]="1" selected="selected">Female</option>
+                    <option [value]="2" >Male</option>
+                  </select>
+                </div>
+              </td>
+              <td>
+                <input type="date" class="form-control" [ngModel]="contact.birthday | date:'yyyy-MM-dd'" (change)="updateBirthDate($event)" style="width: 160px" >
+              </td>
+            </tr>
+          </table>
+          <table class="table table-striped" style="width:100%" [hidden]="isNaturalPerson">
+            <tr>
+              <th scope="col" >Company</th>
+              <th scope="col" >CNPJ</th>
+              <th scope="col" >Trade</th>
+            </tr>
+            <tr>
+              <td>
+                <input class="form-control" maxlength="100" [(ngModel)]="contact.companyName" />
+                <div *ngIf="companyNameHasError===true" class="alert alert-danger" style="width:100%">
+                  <i class="fa fa-warning" aria-hidden="true"></i> Company Name is required.
+                </div>
+              </td>
+              <td>
+                <input class="form-control" maxlength="50" [(ngModel)]="contact.cnpj" mask="00.000.000/0000-00" />
+                <div *ngIf="companyCnpjHasError===true" class="alert alert-danger" style="width:100%">
+                  <i class="fa fa-warning" aria-hidden="true"></i> Company CNPJ is required.
+                </div>
+              </td>
+              <td><input class="form-control" maxlength="100" [(ngModel)]="contact.tradeName" /></td>
+            </tr>
+           </table>
+          <table class="table table-striped" style="width:75%">
+            <tr>
+              <th scope="col" style="width:30%">Country</th>
+              <th scope="col" style="width:20%">State</th>
+              <th scope="col" style="width:20%">City</th>
+
+            </tr>
+            <tr>
+              <td>
+                <input class="form-control" maxlength="100" [(ngModel)]="contact.country" />
+              </td>
+              <td>
+                <input class="form-control" maxlength="100" [(ngModel)]="contact.state" />
+              </td>
+              <td>
+                <input class="form-control" maxlength="100" [(ngModel)]="contact.city" />
+              </td>
+            </tr>
+            <tr>
+              <th scope="col">Address Line 1</th>
+              <th scope="col" colspan="2" style="width:40%">Address Line 2</th>
+            </tr>
+            <tr>
+              <td>
+                <input class="form-control" [(ngModel)]="contact.addressLine1" />
+              </td>
+              <td>
+                <input class="form-control" [(ngModel)]="contact.addressLine2" />
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      </table>
+    </div>
+      <!--registration-->
+</body>
+</html>
