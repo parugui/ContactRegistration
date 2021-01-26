@@ -9,6 +9,7 @@ Database: Entity Framework in-Memory
 Pre-Req: Node.js Installed on machine
 
 To run the Application
+
 1 - Make sure your solution has the option "Multiple startup Projects" check
 
 2 - Choose ContactsRegistration.Web and ContactsRegistrion.WebAPI to start 
