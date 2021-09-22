@@ -8,9 +8,17 @@ namespace ContactsRegistration.Domain.Service
 {
 	public class UpdateContactDomain : IUpdateContactDomain
 	{
+		private readonly IContactRepository _contactRepository;
+
+		public UpdateContactDomain(IContactRepository contactRepository)
+		{
+			_contactRepository = contactRepository;
+
+		}
+
 		public void Execute(ContactDomain contact)
 		{
-			DomainBase.provider.GetService<IContactRepository>().Update(contact);
+			_contactRepository.Update(contact);
 		}
 	}
 }

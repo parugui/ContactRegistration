@@ -8,17 +8,12 @@ namespace ContactsRegistration.WebAPI.Controllers
 {
     public class WebApiControllerBase : ControllerBase
     {        
-        public ServiceProvider Provider { get; private set; }
         public IConfiguration Configuration { get; private set; }
 
         public WebApiControllerBase()
         {
-            var service = new ServiceCollection();
-            service.AddApplicationServiceCollection();
 
-            Provider = service.BuildServiceProvider();
             ConfigurationBase();
-            
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -31,6 +26,14 @@ namespace ContactsRegistration.WebAPI.Controllers
             Configuration = builder.Build();
         }
 
-     
+        protected IActionResult Ok<T>(T result)
+        {
+            return base.Ok(result);
+        }
+
+        protected IActionResult Error(string errorMessage)
+        {
+            return base.BadRequest(errorMessage);
+        }
     }
 }

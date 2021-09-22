@@ -8,9 +8,17 @@ namespace ContactsRegistration.Domain.Service
 {
 	public class SelectContactDomain : ISelectContactDomain
 	{
+		private readonly IContactRepository _contactRepository;
+
+		public SelectContactDomain(IContactRepository contactRepository)
+		{
+			_contactRepository = contactRepository;
+
+		}
+
 		public ContactDomain Execute(int IdContact)
 		{
-			return DomainBase.provider.GetService<IContactRepository>().Select(IdContact);
+			return _contactRepository.Select(IdContact);
 		}
 	}
 }

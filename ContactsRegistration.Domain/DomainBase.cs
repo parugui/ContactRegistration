@@ -15,8 +15,6 @@ namespace ContactsRegistration.Domain
 
         public static IConfiguration config;
 
-        public static ServiceProvider provider { get; set; }
-
         public DomainBase()
         {
             RepositoryBase();

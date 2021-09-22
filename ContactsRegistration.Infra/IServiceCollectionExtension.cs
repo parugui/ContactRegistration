@@ -7,10 +7,10 @@ namespace ContactsRegistration.Infra
 {
     public static class IServiceCollectionExtension
     {
-        public static IServiceCollection AddInfraServiceCollection(this IServiceCollection services)
+        public static void AddInfraServiceCollection(this IServiceCollection services)
         {
             services.AddScoped<IContactRepository, ContactRepository>();
-            return services;
+            
         }
     }
 }

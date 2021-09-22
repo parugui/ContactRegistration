@@ -8,9 +8,17 @@ namespace ContactsRegistration.Domain.Service
 {
 	public class ListAllContactsDomain : IListAllContactsDomain
 	{
+		private readonly IContactRepository _contactRepository;
+
+		public ListAllContactsDomain(IContactRepository contactRepository)
+		{
+			_contactRepository = contactRepository;
+
+		}
+
 		public List<ContactDomain> Execute()
 		{
-			return DomainBase.provider.GetService<IContactRepository>().List();
+			return _contactRepository.List();
 		}
 	}
 }

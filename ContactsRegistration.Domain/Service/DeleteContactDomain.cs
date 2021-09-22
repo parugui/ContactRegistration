@@ -8,9 +8,17 @@ namespace ContactsRegistration.Domain.Service
 {
 	public class DeleteContactDomain : IDeleteContactDomain
 	{
+		private readonly IContactRepository _contactRepository;
+
+        public DeleteContactDomain(IContactRepository contactRepository)
+        {
+			_contactRepository = contactRepository;
+
+		}
+
 		public void Execute(int IdContact)
 		{
-			DomainBase.provider.GetService<IContactRepository>().Delete(IdContact);
+			_contactRepository.Delete(IdContact);
 		}
 	}
 }

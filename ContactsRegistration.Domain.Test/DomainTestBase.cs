@@ -26,7 +26,7 @@ namespace ContactsRegistration.Domain.Test
 
             provider = service.BuildServiceProvider();
 
-            provider.GetService<IInitializeDomain>().Initialize(provider);
+            //provider.GetService<IInitializeDomain>().Initialize(provider);
 
         }
 

@@ -6,28 +6,35 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using ContactsRegistration.Application.Interfaces;
 using ContactsRegistration.Application.ViewModels;
+using ContactsRegistration.Application.Dto;
 
 namespace ContactsRegistration.WebAPI.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class ContactController: WebApiControllerBase
+	public class ContactController : WebApiControllerBase
 	{
-		[HttpGet()]
-		public IActionResult GET(int IdContact)
+		private readonly IContactApplication _contactApplication;
+
+		public ContactController(IContactApplication contactApplication)
+		{
+			_contactApplication = contactApplication;
+		}
+
+		[HttpGet("{id}")]
+		public IActionResult GetContactById(int id)
 		{
 			vmResult result = new vmResult();
 			try
 			{
-				var service = Provider.GetService<IContactApplication>();
-				vmContact contact = service.Select(IdContact);
+				vmContact contact = _contactApplication.Select(id);
 				result.Data = contact;
 				if (contact == null)
 					result.FriendlyErrorMessage = "No Records Found!";
 
 				return Ok(result);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				result.FriendlyErrorMessage = "Unexpected System Error";
 				result.StackTrace = ex.Message + "/n" + ex.StackTrace;
@@ -36,14 +43,13 @@ namespace ContactsRegistration.WebAPI.Controllers
 
 		}
 
-		[HttpGet("List")]
-		public IActionResult List()
+		[HttpGet()]
+		public IActionResult GetAllContacts()
 		{
 			vmResult result = new vmResult();
 			try
 			{
-				var service = Provider.GetService<IContactApplication>();
-				List<vmContact> Contacts = service.List();
+				List<vmContact> Contacts = _contactApplication.List();
 				result.Data = Contacts;
 				if (Contacts == null || Contacts.Count == 0)
 					result.FriendlyErrorMessage = "No Records Found!";
@@ -59,39 +65,16 @@ namespace ContactsRegistration.WebAPI.Controllers
 
 		}
 
-		[HttpDelete()]
-		public IActionResult Delete(int IdContact)
-		{
-			vmResult result = new vmResult();
-			try
-			{
-				var service = Provider.GetService<IContactApplication>();
-				service.Delete(IdContact);
-				return Ok();
-			}
-			catch (ArgumentException aex)
-			{
-				result.FriendlyErrorMessage = aex.Message;
-				return Ok(result);
-			}
-			catch (Exception ex)
-			{
-				result.FriendlyErrorMessage = "Unexpected System Error";
-				result.StackTrace = ex.Message + "/n" + ex.StackTrace;
-				return BadRequest(result);
-			}
-			
-
-		}
+		[HttpDelete("{id}")]
+		public ResponseDto UnregisterContact(int id) => _contactApplication.UnregisterContact(id);
 
 		[HttpPut()]
-		public IActionResult PUT(vmContact contact)
+		public IActionResult EditContact(vmContact contact)
 		{
 			vmResult result = new vmResult();
 			try
 			{
-				var service = Provider.GetService<IContactApplication>();
-				service.Update(contact);
+				_contactApplication.Update(contact);
 				return Ok();
 			}
 			catch (Exception ex)
@@ -103,13 +86,12 @@ namespace ContactsRegistration.WebAPI.Controllers
 		}
 
 		[HttpPost()]
-		public IActionResult POST(vmContact contact)
+		public IActionResult RegisterContact(vmContact contact)
 		{
 			vmResult result = new vmResult();
 			try
 			{
-				var service = Provider.GetService<IContactApplication>();
-				service.Insert(contact);
+				_contactApplication.Insert(contact);
 
 				return Ok();
 			}

@@ -1,4 +1,5 @@
-﻿using ContactsRegistration.Application.Interfaces;
+﻿using ContactsRegistration.Application.Dto;
+using ContactsRegistration.Application.Interfaces;
 using ContactsRegistration.Application.ViewModels;
 using ContactsRegistration.Domain;
 using ContactsRegistration.Domain.Interfaces;
@@ -8,26 +9,48 @@ using System.Text;
 
 namespace ContactsRegistration.Application.Services
 {
-	public class ContactApplication : ApplicationBase, IContactApplication
+	public class ContactApplication : IContactApplication
 	{
-		public void Delete(int IdContact)
+		private readonly IDeleteContactDomain _deleteContactDomain;
+		private readonly IInsertContactDomain _insertContactDomain;
+		private readonly IListAllContactsDomain _listAllContactsDomain;
+		private readonly ISelectContactDomain _selectContactDomain;
+		private readonly IUpdateContactDomain _updateContactDomain;
+
+		public ContactApplication(IDeleteContactDomain deleteContactDomain, IInsertContactDomain insertContactDomain, IListAllContactsDomain listAllContactsDomain,
+								ISelectContactDomain selectContactDomain, IUpdateContactDomain updateContactDomain)
+        {
+			_deleteContactDomain = deleteContactDomain;
+			_insertContactDomain = insertContactDomain;
+			_listAllContactsDomain = listAllContactsDomain;
+			_selectContactDomain = selectContactDomain;
+			_updateContactDomain = updateContactDomain;
+
+		}
+
+
+		/// <summary>
+		/// Unregister Contact by id
+		/// </summary>
+		/// <param name="Id">Id of contact</param>
+		/// <returns></returns>
+		public ResponseDto UnregisterContact(int id)
 		{
-			var domain = GetService<IDeleteContactDomain>();
-			domain.Execute(IdContact);
+			_deleteContactDomain.Execute(id);
+
+			return ResponseDto.ResponseSuccess();
 		}
 
 		public void Insert(vmContact contact)
 		{
-			var domain = GetService<IInsertContactDomain>();
 			var contactDomain = ConvertToDomainModel(contact);
-			domain.Execute(contactDomain);
+			_insertContactDomain.Execute(contactDomain);
 			
 		}
 
 		public List<vmContact> List()
 		{
-			var domain = GetService<IListAllContactsDomain>();
-			List<ContactDomain> Contacts = domain.Execute();
+			List<ContactDomain> Contacts = _listAllContactsDomain.Execute();
 
 			List<vmContact> ListContacts = new List<vmContact>();
 			foreach(ContactDomain contact in Contacts)
@@ -40,8 +63,7 @@ namespace ContactsRegistration.Application.Services
 
 		public vmContact Select(int IdContact)
 		{
-			var domain = GetService<ISelectContactDomain>();
-			ContactDomain contact = domain.Execute(IdContact);
+			ContactDomain contact = _selectContactDomain.Execute(IdContact);
 			if (contact == null)
 				return null;
 			else
@@ -50,9 +72,8 @@ namespace ContactsRegistration.Application.Services
 
 		public void Update(vmContact contact)
 		{
-			var domain = GetService<IUpdateContactDomain>();
 			ContactDomain contactDomain = ConvertToDomainModel(contact);
-			domain.Execute(contactDomain);
+			_updateContactDomain.Execute(contactDomain);
 		}
 
 		private ContactDomain ConvertToDomainModel(vmContact contact)
