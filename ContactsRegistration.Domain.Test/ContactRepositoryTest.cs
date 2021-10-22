@@ -46,7 +46,7 @@ namespace ContactsRegistration.Domain.Test
 
 			this.AddTestContacts(context);
 
-			ContactDomain contact = new ContactDomain
+			NaturalPerson contact = new NaturalPerson
 			{
 				IdContact = 3,
 				Name = "Guilherme Resende",
@@ -80,7 +80,7 @@ namespace ContactsRegistration.Domain.Test
 
 			this.AddTestContacts(context);
 
-			ContactDomain contact1 = context.Contact.Find(1);
+			NaturalPerson contact1 = context.Contact.Find(1);
 			contact1.Name = "Maria Ruth da Silva Resende";
 			contact1.AddressLine1 = "Rua Sinval Duarte Pereira, 32";
 			repo.Update(contact1);

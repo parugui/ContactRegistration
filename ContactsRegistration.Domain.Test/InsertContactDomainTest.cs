@@ -19,7 +19,7 @@ namespace ContactsRegistration.Domain.Test
 
 			this.AddTestContacts(context);
 
-			ContactDomain contact = new ContactDomain
+			NaturalPerson contact = new NaturalPerson
 			{
 				IdContact = 3,
 				Name = "Guilherme Resende",

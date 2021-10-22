@@ -6,6 +6,6 @@ namespace ContactsRegistration.Domain.Interfaces
 {
 	public interface IListAllContactsDomain
 	{
-		List<ContactDomain> Execute();
+		List<NaturalPerson> Execute();
 	}
 }

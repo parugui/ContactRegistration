@@ -16,7 +16,7 @@ namespace ContactsRegistration.Domain.Service
 
 		}
 
-		public List<ContactDomain> Execute()
+		public List<NaturalPerson> Execute()
 		{
 			return _contactRepository.List();
 		}

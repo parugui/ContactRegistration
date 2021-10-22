@@ -16,7 +16,7 @@ namespace ContactsRegistration.Domain.Service
 
 		}
 
-		public void Execute(ContactDomain contact)
+		public void Execute(NaturalPerson contact)
 		{
 			_contactRepository.Insert(contact);
 		}

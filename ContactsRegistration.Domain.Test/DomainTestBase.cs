@@ -35,7 +35,7 @@ namespace ContactsRegistration.Domain.Test
             var contact1 = context.Contact.Find(1);
             if (contact1 == null)
             {
-                context.Contact.Add(new ContactDomain
+                context.Contact.Add(new NaturalPerson
                 {
                     IdContact = 1,
                     Name = "Ruth Resende",
@@ -47,7 +47,7 @@ namespace ContactsRegistration.Domain.Test
             var contact2 = context.Contact.Find(2);
             if (contact2 == null)
             {
-                context.Contact.Add(new ContactDomain
+                context.Contact.Add(new NaturalPerson
                 {
                     IdContact = 2,
                     Name = "Paulo Resende",

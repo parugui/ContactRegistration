@@ -50,10 +50,10 @@ namespace ContactsRegistration.Application.Services
 
 		public List<vmContact> List()
 		{
-			List<ContactDomain> Contacts = _listAllContactsDomain.Execute();
+			List<NaturalPerson> Contacts = _listAllContactsDomain.Execute();
 
 			List<vmContact> ListContacts = new List<vmContact>();
-			foreach(ContactDomain contact in Contacts)
+			foreach(NaturalPerson contact in Contacts)
 			{
 				ListContacts.Add(ConvertToViewModel(contact));
 			}
@@ -63,7 +63,7 @@ namespace ContactsRegistration.Application.Services
 
 		public vmContact Select(int IdContact)
 		{
-			ContactDomain contact = _selectContactDomain.Execute(IdContact);
+			NaturalPerson contact = _selectContactDomain.Execute(IdContact);
 			if (contact == null)
 				return null;
 			else
@@ -72,13 +72,13 @@ namespace ContactsRegistration.Application.Services
 
 		public void Update(vmContact contact)
 		{
-			ContactDomain contactDomain = ConvertToDomainModel(contact);
+			NaturalPerson contactDomain = ConvertToDomainModel(contact);
 			_updateContactDomain.Execute(contactDomain);
 		}
 
-		private ContactDomain ConvertToDomainModel(vmContact contact)
+		private NaturalPerson ConvertToDomainModel(vmContact contact)
 		{
-			ContactDomain contactDomain = new ContactDomain();
+			NaturalPerson contactDomain = new NaturalPerson();
 			contactDomain.IdContact = contact.IdContact;
 			contactDomain.Name = contact.Name;
 			contactDomain.CPF = contact.CPF;
@@ -97,7 +97,7 @@ namespace ContactsRegistration.Application.Services
 			return contactDomain;
 		}
 
-		private vmContact ConvertToViewModel(ContactDomain contact)
+		private vmContact ConvertToViewModel(NaturalPerson contact)
 		{
 			vmContact contactModel = new vmContact();
 			contactModel.IdContact = contact.IdContact;

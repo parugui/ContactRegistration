@@ -11,6 +11,6 @@ namespace ContactsRegistration.Infra
 		public ApiContext(DbContextOptions<ApiContext> options) : base(options)
 		{ }
 
-		public DbSet<ContactDomain> Contact { get; set; }
+		public DbSet<NaturalPerson> Contact { get; set; }
 	}
 }

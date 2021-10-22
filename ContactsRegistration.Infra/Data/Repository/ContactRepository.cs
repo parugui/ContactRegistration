@@ -19,7 +19,7 @@ namespace ContactsRegistration.Infra.Data.Repository
 
 		public void Delete(int IdContact)
 		{
-			ContactDomain contact = _context.Contact.Find(IdContact);
+			NaturalPerson contact = _context.Contact.Find(IdContact);
 			if (contact != null)
 			{
 				_context.Contact.Remove(contact);
@@ -31,20 +31,20 @@ namespace ContactsRegistration.Infra.Data.Repository
 			}
 		}
 
-		public void Insert(ContactDomain contact)
+		public void Insert(NaturalPerson contact)
 		{
 			_context.Contact.Add(contact);
 			_context.SaveChanges();
 		}
 
-		public List<ContactDomain> List()
+		public List<NaturalPerson> List()
 		{
 			var contact = _context.Contact.ToArrayAsync().GetAwaiter();
 			return contact.GetResult().ToList();
 			
 		}
 
-		public ContactDomain Select(int IdContact)
+		public NaturalPerson Select(int IdContact)
 		{
 			var contact = _context.Contact
 								.Where(c => c.IdContact == IdContact)
@@ -56,9 +56,9 @@ namespace ContactsRegistration.Infra.Data.Repository
 				return null;
 		}
 
-		public void Update(ContactDomain contact)
+		public void Update(NaturalPerson contact)
 		{
-			ContactDomain contactUpdt = _context.Contact.Find(contact.IdContact);
+			NaturalPerson contactUpdt = _context.Contact.Find(contact.IdContact);
 			if (contactUpdt != null)
 			{
 				contactUpdt.Name = contact.Name;
